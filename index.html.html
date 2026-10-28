@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>San Francisco Film | Productora Audiovisual</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (via CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            light: '#F0C808',
+                            DEFAULT: '#D4AF37',
+                            dark: '#B8860B',
+                            glow: '#FFD700'
+                        },
+                        dark: {
+                            base: '#050505',
+                            card: '#0a0a0a',
+                            surface: '#121212',
+                            border: '#262626'
+                        }
+                    },
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        montserrat: ['Montserrat', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom Styles -->
+    <style>
+        /* Estilos personalizados y utilidades de efectos dorados */
+        body {
+            background-color: #050505;
+            color: #e5e5e5;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Texto con gradiente dorado */
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #FFF099 0%, #D4AF37 50%, #AA7C11 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Bordes y sombras doradas */
+        .gold-border {
+            border: 1px solid rgba(212, 175, 55, 0.4);
+        }
+
+        .gold-border-hover:hover {
+            border-color: rgba(212, 175, 55, 0.9);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+        }
+
+        .gold-glow {
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .gold-glow-sm {
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+        }
+
+        /* Botón estilo Cinematográfico */
+        .btn-gold {
+            background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+            color: #000000;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+        }
+
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #FFE066 0%, #D4AF37 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-outline-gold {
+            border: 1px solid #D4AF37;
+            color: #D4AF37;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-gold:hover {
+            background: rgba(212, 175, 55, 0.15);
+            color: #FFF099;
+            border-color: #FFD700;
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Personalización de Barra de Desplazamiento */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333333;
+            border-radius: 4px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D4AF37;
+        }
+
+        /* Fondo de malla sutil */
+        .bg-pattern {
+            background-image: radial-gradient(rgba(212, 175, 55, 0.08) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen selection:bg-gold selection:text-black">
+
+    <!-- MENSAJE DE NOTIFICACIÓN / TOAST -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-dark-card border border-gold px-5 py-4 rounded-xl shadow-2xl flex items-center gap-3">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-gold text-xl"></i>
+        <span id="toast-message" class="text-sm font-medium text-gray-200">Mensaje de notificación</span>
+    </div>
+
+    <!-- BOTÓN / BARRA FLOTANTE DE MODO ADMIN -->
+    <div id="admin-bar" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-dark-card/90 backdrop-blur-md border border-gold/60 rounded-full px-6 py-3 shadow-2xl flex items-center gap-4">
+        <span class="text-xs text-gold uppercase tracking-widest font-bold flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            Modo Administrador Activo
+        </span>
+        <div class="h-4 w-[1px] bg-gold/30"></div>
+        <button onclick="openModal('modal-event')" class="text-xs btn-gold px-3 py-1.5 rounded-full flex items-center gap-1.5">
+            <i class="fa-solid fa-plus"></i> Nuevo Evento
+        </button>
+        <button onclick="logoutAdmin()" class="text-xs text-red-400 hover:text-red-300 transition flex items-center gap-1">
+            <i class="fa-solid fa-right-from-bracket"></i> Salir
+        </button>
+    </div>
+
+    <!-- 1. NAVEGACIÓN / HEADER -->
+    <header class="sticky top-0 z-40 bg-dark-base/90 backdrop-blur-md border-b border-gold/20 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo Brand -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-lg border border-gold/60 flex items-center justify-center bg-dark-surface group-hover:border-gold transition">
+                    <i class="fa-solid fa-film text-gold text-lg group-hover:scale-110 transition duration-300"></i>
+                </div>
+                <div>
+                    <span class="font-heading text-lg sm:text-xl font-bold tracking-wider gold-gradient-text block leading-none">SAN FRANCISCO</span>
+                    <span class="text-[10px] tracking-[0.3em] text-gray-400 font-semibold block uppercase">FILM</span>
+                </div>
+            </a>
+
+            <!-- Menú Escritorio -->
+            <nav class="hidden md:flex items-center gap-8 font-medium text-sm">
+                <a href="#inicio" class="text-gray-300 hover:text-gold transition">Inicio</a>
+                <a href="#galeria" class="text-gray-300 hover:text-gold transition">Galería</a>
+                <a href="#eventos" class="text-gray-300 hover:text-gold transition">Eventos & Proyectos</a>
+                <a href="#sf_film" class="text-gray-300 hover:text-gold transition">SF Film</a>
+                <a href="#contacto" class="text-gray-300 hover:text-gold transition">Contacto</a>
+            </nav>
+
+            <!-- Acciones Header -->
+            <div class="hidden md:flex items-center gap-4">
+                <button id="btn-admin-auth" onclick="toggleAdminAuthModal()" class="btn-outline-gold text-xs px-4 py-2 rounded-lg flex items-center gap-2">
+                    <i class="fa-solid fa-lock"></i> <span id="auth-btn-text">Acceso Admin</span>
+                </button>
+            </div>
+
+            <!-- Botón Hamburguesa Móvil -->
+            <button onclick="toggleMobileMenu()" class="md:hidden text-gray-300 hover:text-gold focus:outline-none p-2">
+                <i id="mobile-menu-icon" class="fa-solid fa-bars text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Menú desplegable Móvil -->
+        <div id="mobile-menu" class="hidden md:hidden bg-dark-surface border-b border-gold/20 px-4 pt-2 pb-6 space-y-3">
+            <a href="#inicio" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-gold">Inicio</a>
+            <a href="#galeria" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-gold">Galería</a>
+            <a href="#eventos" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-gold">Eventos & Proyectos</a>
+            <a href="#sf_film" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-gold">SF Film</a>
+            <a href="#contacto" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-gold">Contacto</a>
+            <div class="pt-2 border-t border-gray-800">
+                <button id="btn-admin-auth-mobile" onclick="toggleMobileMenu(); toggleAdminAuthModal()" class="w-full btn-outline-gold text-xs py-2.5 rounded-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-lock"></i> <span id="auth-btn-text-mobile">Acceso Admin</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. INICIO / HERO SECTION -->
+    <section id="inicio" class="relative min-h-[90vh] flex items-center justify-center text-center px-4 overflow-hidden bg-pattern">
+        <!-- Overlay sutil con degradado oscuro -->
+        <div class="absolute inset-0 bg-gradient-to-t from-dark-base via-dark-base/70 to-dark-base/90 z-10"></div>
+        
+        <!-- Elemento Decorativo Brillante de Fondo -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/10 rounded-full blur-[140px] pointer-events-none"></div>
+
+        <div class="relative z-20 max-w-4xl mx-auto space-y-8 pt-12">
+            <!-- Badge Superior -->
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-dark-surface/80 border border-gold/40 text-gold text-xs tracking-widest uppercase font-semibold animate-pulse">
+                <i class="fa-solid fa-clapperboard"></i> Productora AudioVisual Profesional
+            </div>
+
+            <!-- Título Principal -->
+            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-tight">
+                <span class="block">SAN FRANCISCO FILM</span>
+                <span class="gold-gradient-text">FILM</span>
+            </h1>
+
+            <!-- Eslogan -->
+            <p class="text-xl sm:text-2xl text-gray-300 font-light italic max-w-2xl mx-auto tracking-wide">
+                "Grabando Historias, Capturando Momentos"
+            </p>
+
+            <p class="text-sm sm:text-base text-gray-400 max-w-xl mx-auto font-normal">
+                Especialistas en producción audiovisual en diferentes eventos como ser Bodas, Festividades Patronales, Cumpleaños, 15 años, Videoclips y Cobertura en Gral.
+            </p>
+
+            <!-- Acciones -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                <a href="#eventos" class="w-full sm:w-auto btn-gold px-8 py-4 rounded-xl text-sm uppercase tracking-wider font-bold flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-play text-xs"></i> Ver Trabajos
+                </a>
+                <a href="#contacto" class="w-full sm:w-auto btn-outline-gold px-8 py-4 rounded-xl text-sm uppercase tracking-wider font-bold flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-envelope"></i> Contratar Servicios
+                </a>
+            </div>
+
+            <!-- Indicadores Rápidos de Stats -->
+            <div class="pt-12 grid grid-cols-2 md:grid-cols-4 gap-6 border-t border-gold/15 max-w-3xl mx-auto">
+                <div>
+                    <span class="block text-2xl font-bold gold-gradient-text font-heading">+100</span>
+                    <span class="text-xs text-gray-400 uppercase tracking-wider">Proyectos Realizados</span>
+                </div>
+                <div>
+                    <span class="block text-2xl font-bold gold-gradient-text font-heading">FHD UHD 4K</span>
+                    <span class="text-xs text-gray-400 uppercase tracking-wider">Calidad de Grabación</span>
+                </div>
+                <div>
+                    <span class="block text-2xl font-bold gold-gradient-text font-heading">100%</span>
+                    <span class="text-xs text-gray-400 uppercase tracking-wider">Clientes Satisfechos</span>
+                </div>
+                <div>
+                    <span class="block text-2xl font-bold gold-gradient-text font-heading">+10 Años</span>
+                    <span class="text-xs text-gray-400 uppercase tracking-wider">Experiencia</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. GALERÍA MULTIMEDIA REUTILIZABLE -->
+    <section id="galeria" class="py-24 bg-dark-surface border-t border-b border-gold/15 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center space-y-3 mb-12">
+                <span class="text-gold text-xs uppercase tracking-[0.3em] font-bold block">Portafolio General</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white font-heading">Galería Multimedia</h2>
+                <div class="w-20 h-0.5 bg-gold mx-auto"></div>
+            </div>
+
+            <!-- Filtros de Pestañas -->
+            <div class="flex justify-center gap-2 sm:gap-4 mb-10 overflow-x-auto pb-2">
+                <button onclick="filterGallery('all')" id="tab-all" class="tab-btn active px-6 py-2.5 rounded-full text-xs font-semibold tracking-wider transition bg-gold text-black">
+                    TODAS
+                </button>
+                <button onclick="filterGallery('foto')" id="tab-foto" class="tab-btn px-6 py-2.5 rounded-full text-xs font-semibold tracking-wider transition border border-gold/30 text-gray-300 hover:border-gold">
+                    FOTOGRAFÍA
+                </button>
+                <button onclick="filterGallery('video')" id="tab-video" class="tab-btn px-6 py-2.5 rounded-full text-xs font-semibold tracking-wider transition border border-gold/30 text-gray-300 hover:border-gold">
+                    VIDEOS / REEL
+                </button>
+            </div>
+
+            <!-- Cuadrícula de Galería -->
+            <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Se cargará dinámicamente con JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. SECCIÓN DE EVENTOS Y CONTRATOS (DINÁMICO) -->
+    <section id="eventos" class="py-24 bg-dark-base relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                <div>
+                    <span class="text-gold text-xs uppercase tracking-[0.3em] font-bold block">Proyectos Destacados</span>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white font-heading">Eventos & Contratos</h2>
+                    <p class="text-gray-400 text-sm mt-2 max-w-xl">Explora nuestros trabajos recientes con sus respectivas galerías de fotos exclusivas para nuestros clientes.</p>
+                </div>
+
+                <!-- Botón visible de agregar evento (para el público invita a ingresar como admin o muestra al admin directo) -->
+                <div id="admin-event-btn-container" class="hidden">
+                    <button onclick="openModal('modal-event')" class="btn-gold px-5 py-3 rounded-xl text-xs uppercase tracking-wider font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-plus-circle text-base"></i> Crear Nuevo Evento
+                    </button>
+                </div>
+            </div>
+
+            <!-- Contenedor de Tarjetas de Eventos -->
+            <div id="events-container" class="space-y-12">
+                <!-- Carga dinámica con JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. NOSOTROS & SERVICIOS -->
+    <section id="nosotros" class="py-24 bg-dark-surface border-t border-gold/15 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
+                <div class="space-y-6">
+                    <span class="text-gold text-xs uppercase tracking-[0.3em] font-bold block">Nuestra Trayectoria</span>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white font-heading leading-tight">Pasión por la excelencia en Video y Photográfica</h2>
+                    <p class="text-gray-300 text-sm leading-relaxed">
+                        En <strong class="text-gold">San Francisco Film</strong> transformamos momentos únicos en obras audiovisuales. Contamos con tecnología y un equipo creativo dedicado a capturar la esencia real de cada historia con un enfoque artístico elegante.
+                    </p>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Desde producciones matrimoniales íntimas hasta grandes eventos de gala y producciones musicales comerciales, entregamos un producto final impecable en resolución FHD, UHD, 2K y 4K con edición de nivel.
+                    </p>
+                    <div class="pt-2 flex items-center gap-6">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-camera-retro text-2xl text-gold"></i>
+                            <div>
+                                <span class="block text-sm font-bold text-white">Equipo UHD</span>
+                                <span class="text-xs text-gray-400">Cámaras de alta resolucion</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-sliders text-2xl text-gold"></i>
+                            <div>
+                                <span class="block text-sm font-bold text-white">Produccion de Video</span>
+                                <span class="text-xs text-gray-400">Edición profesional</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta de Presentación Creativa -->
+                <div class="relative">
+                    <div class="absolute -inset-1 rounded-2xl bg-gradient-to-r from-gold/40 to-gold/10 blur-xl opacity-50"></div>
+                    <div class="relative bg-dark-card border border-gold/40 p-8 rounded-2xl space-y-6">
+                        <h3 class="text-xl font-bold text-gold font-heading border-b border-gold/20 pb-4">Nuestros Servicios Principales</h3>
+                        <ul class="space-y-4 text-sm text-gray-300">
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-ring text-gold mt-1"></i>
+                                <div>
+                                    <strong class="text-white block">Bodas & Festividades</strong>
+                                    <span>Cobertura en Eventos y Videoclip  elopement.</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-building text-gold mt-1"></i>
+                                <div>
+                                    <strong class="text-white block">Eventos Publicos & Galas</strong>
+                                    <span>Lanzamiento de marcas, congresos y piezas publicitarias.</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-music text-gold mt-1"></i>
+                                <div>
+                                    <strong class="text-white block">Videoclips Musicales</strong>
+                                    <span>Producción completa de videoclips para artistas y bandas.</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-plane text-gold mt-1"></i>
+                                <div>
+                                    <strong class="text-white block">Fotografía & Tomas con Dron</strong>
+                                    <span>Fotografía de estudio, exteriores y videos aéreos.</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. CONTACTO -->
+    <section id="contacto" class="py-24 bg-dark-base relative border-t border-gold/15">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center space-y-3 mb-16">
+                <span class="text-gold text-xs uppercase tracking-[0.3em] font-bold block">Reserva tu fecha</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white font-heading">Ponte en Contacto</h2>
+                <div class="w-20 h-0.5 bg-gold mx-auto"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                <!-- Información de Contacto Directo -->
+                <div class="space-y-6 bg-dark-card p-8 rounded-2xl border border-gold/30">
+                    <h3 class="text-xl font-bold text-gold font-heading">Información Directa</h3>
+                    <p class="text-gray-400 text-sm">¿Tienes una fecha especial en mente? Contáctanos directamente para verificar disponibilidad o agendar una cita personal.</p>
+                    
+                    <div class="space-y-4 text-sm pt-2">
+                        <a href="https://wa.me/59162822991" target="_blank" class="flex items-center gap-4 text-gray-300 hover:text-gold transition p-3 rounded-xl bg-dark-surface border border-gold/10">
+                            <i class="fa-brands fa-whatsapp text-2xl text-emerald-400"></i>
+                            <div>
+                                <span class="block font-semibold text-white">WhatsApp</span>
+                                <span class="text-xs text-gray-400">+591 62822991</span>
+                            </div>
+                        </a>
+
+                        <a href="mailto:rcondepaiva@gmail.com" class="flex items-center gap-4 text-gray-300 hover:text-gold transition p-3 rounded-xl bg-dark-surface border border-gold/10">
+                            <i class="fa-solid fa-envelope text-2xl text-gold"></i>
+                            <div>
+                                <span class="block font-semibold text-white">Correo Electrónico</span>
+                                <span class="text-xs text-gray-400">rcondepaiva@gmail.com</span>
+                            </div>
+                        </a>
+
+                        <div class="flex items-center gap-4 text-gray-300 p-3 rounded-xl bg-dark-surface border border-gold/10">
+                            <i class="fa-solid fa-location-dot text-2xl text-gold"></i>
+                            <div>
+                                <span class="block font-semibold text-white">Estudio Audiovisual</span>
+                                <span class="text-xs text-gray-400">Av. 1ro de Mayo entre Villazon y P. Ferrari #321</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulario Interactivo -->
+                <div class="lg:col-span-2 bg-dark-card p-8 rounded-2xl border border-gold/30">
+                    <form onsubmit="handleContactSubmit(event)" class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs uppercase text-gray-300 font-semibold mb-2">Nombre Completo *</label>
+                                <input type="text" required placeholder="Ej. Carlos Mendoza" class="w-full bg-dark-surface border border-gold/30 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-gold transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase text-gray-300 font-semibold mb-2">Teléfono / WhatsApp *</label>
+                                <input type="tel" required placeholder="+591 ..." class="w-full bg-dark-surface border border-gold/30 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-gold transition">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs uppercase text-gray-300 font-semibold mb-2">Tipo de Servicio</label>
+                                <select class="w-full bg-dark-surface border border-gold/30 rounded-lg px-4 py-3 text-sm text-gray-300 focus:outline-none focus:border-gold transition">
+                                    <option>Boda / Matrimonio</option>
+                                    <option>Evento Corporativo</option>
+                                    <option>Videoclip Musical</option>
+                                    <option>Quinceañero / Cumpleaños</option>
+                                    <option>Otro Proyecto</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase text-gray-300 font-semibold mb-2">Fecha Estimada del Evento</label>
+                                <input type="date" class="w-full bg-dark-surface border border-gold/30 rounded-lg px-4 py-3 text-sm text-gray-300 focus:outline-none focus:border-gold transition">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs uppercase text-gray-300 font-semibold mb-2">Detalles del Requerimiento *</label>
+                            <textarea rows="4" required placeholder="Cuéntanos más sobre tu evento o idea de producción..." class="w-full bg-dark-surface border border-gold/30 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-gold transition"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full btn-gold py-4 rounded-xl text-xs uppercase tracking-wider font-bold">
+                            Enviar Consulta de Cotización
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. PIE DE PÁGINA (FOOTER) -->
+    <footer class="bg-dark-surface border-t border-gold/20 py-12 text-center text-xs text-gray-400">
+        <div class="max-w-7xl mx-auto px-4 space-y-6">
+            <div class="flex justify-center items-center gap-3">
+                <i class="fa-solid fa-film text-gold text-2xl"></i>
+                <span class="font-heading text-lg font-bold gold-gradient-text tracking-widest">SAN FRANCISCO FILM</span>
+            </div>
+            <p class="max-w-md mx-auto text-gray-400 font-light">"Capturando las mejores historias en cada evento."</p>
+            
+            <div class="flex justify-center gap-6 text-lg text-gold">
+                <a href="#" class="hover:text-white transition"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#" class="hover:text-white transition"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="hover:text-white transition"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#" class="hover:text-white transition"><i class="fa-brands fa-tiktok"></i></a>
+            </div>
+
+            <div class="border-t border-gray-800 pt-6">
+                <p>&copy; <span id="year"></span> San Francisco Film. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ========================================== -->
+    <!-- MODALES / VENTANAS EMERGENTES              -->
+    <!-- ========================================== -->
+
+    <!-- MODAL 1: AUTENTICACIÓN ADMIN -->
+    <div id="modal-auth" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-dark-card border border-gold/50 rounded-2xl max-w-md w-full p-8 shadow-2xl relative">
+            <button onclick="closeModal('modal-auth')" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="text-center space-y-2 mb-6">
+                <div class="w-12 h-12 bg-dark-surface rounded-full border border-gold flex items-center justify-center mx-auto text-gold text-xl">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white font-heading">Acceso Administrador</h3>
+                <p class="text-xs text-gray-400">Ingresa tus credenciales de control audiovisual</p>
+            </div>
+
+            <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs uppercase text-gray-300 font-semibold mb-1">Usuario</label>
+                    <input type="text" id="admin-user" required placeholder="admin" class="w-full bg-dark-surface border border-gold/30 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-gold">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase text-gray-300 font-semibold mb-1">Contraseña</label>
+                    <input type="password" id="admin-pass" required placeholder="............" class="w-full bg-dark-surface border border-gold/30 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-gold">
+                </div>
+                <div class="p-3 bg-dark-surface rounded-lg border border-gold/10 text-[11px] text-gray-400 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info text-gold"></i>
+                    <span>Credenciales por defecto: <strong>admin</strong> / <strong>san</strongfrancisco123></span>
+                </div>
+                <button type="submit" class="w-full btn-gold py-3 rounded-lg text-xs uppercase font-bold tracking-wider">
+                    Iniciar Sesión
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: CREAR / EDITAR EVENTO -->
+    <div id="modal-event" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-dark-card border border-gold/50 rounded-2xl max-w-2xl w-full p-8 shadow-2xl relative my-8">
+            <button onclick="closeModal('modal-event')" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="space-y-2 mb-6">
+                <h3 id="modal-event-title" class="text-xl font-bold text-white font-heading">Nuevo Evento o Contrato</h3>
+                <p class="text-xs text-gray-400">Registra los datos del proyecto y añade su galería de fotos iniciales.</p>
+            </div>
+
+            <form onsubmit="handleSaveEvent(event)" class="space-y-4">
+                <input type="hidden" id="event-id">
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs uppercase text-gray-300 font-semibold mb-1">Nombre del Evento *</label>
+                        <input type="text" id="event-title" required placeholder="Ej. Boda Alejandro & Lucía" class="w-full bg-dark-surface border border-gold/30 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-gold">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase text-gray-300 font-semibold mb-1">Tipo de Servicio *</label>
+                        <input type="text" id="event-service" required placeholder="Ej. Boda Cinematográfica" class="w-full bg-dark-surface border border-gold/30 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-gold">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs uppercase text-gray-300 font-semibold mb-1">Fecha del Evento *</label>
+                        <input type="date" id="event-date" required class="w-full bg-dark-surface border border-gold/30 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-gold">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase text-gray-300 font-semibold mb-1">Lugar / Ubicación *</label>
+                        <input type="text" id="event-location" required placeholder="Ej. Hotel Los Tajibos, Salón Real" class="w-full bg-dark-surface border border-gold/30 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-gold">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs uppercase text-gray-300 font-semibold mb-1">Descripción del Proyecto</label>
+                    <textarea id="event-desc" rows="3" placeholder="Resumen del trabajo realizado, cobertura, etc..." class="w-full bg-dark-surface border border-gold/30 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-gold"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs uppercase text-gray-300 font-semibold mb-1">Subir Fotografías del Evento</label>
+                    <input type="file" id="event-photos" multiple accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gold file:text-black hover:file:bg-yellow-400 cursor-pointer border border-gold/20 rounded-lg bg-dark-surface p-2">
+                    <p class="text-[11px] text-gray-500 mt-1">Puedes seleccionar múltiples archivos de imagen.</p>
+                </div>
+
+                <div class="pt-4 flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('modal-event')" class="px-5 py-2.5 rounded-lg text-xs font-semibold text-gray-300 border border-gray-700 hover:bg-gray-800">Cancelar</button>
+                    <button type="submit" class="btn-gold px-6 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider">Guardar Evento</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 3: SUBIR FOTOS MÁS A EVENTO EXISTENTE -->
+    <div id="modal-upload-photos" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-dark-card border border-gold/50 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+            <button onclick="closeModal('modal-upload-photos')" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <h3 class="text-lg font-bold text-white font-heading mb-4">Añadir Fotos al Evento</h3>
+            <input type="hidden" id="upload-target-event-id">
+
+            <div class="space-y-4">
+                <input type="file" id="additional-photos-input" multiple accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gold file:text-black hover:file:bg-yellow-400 cursor-pointer border border-gold/20 rounded-lg bg-dark-surface p-2">
+                <button onclick="processUploadAdditionalPhotos()" class="w-full btn-gold py-3 rounded-lg text-xs uppercase font-bold tracking-wider">
+                    Cargar e Insertar Fotos
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: LIGHTBOX / VISOR DE IMAGEN A TAMAÑO COMPLETO -->
+    <div id="modal-lightbox" class="hidden fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center p-4">
+        <button onclick="closeModal('modal-lightbox')" class="absolute top-6 right-6 text-gold hover:text-white text-3xl">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="max-w-5xl max-h-[80vh] flex items-center justify-center">
+            <img id="lightbox-img" src="" alt="Vista previa" class="max-h-[80vh] max-w-full rounded-lg border border-gold/30 object-contain">
+        </div>
+
+        <div class="mt-4 flex items-center gap-4">
+            <a id="lightbox-download" href="" download="san-francisco-film.jpg" class="btn-gold px-6 py-2.5 rounded-full text-xs uppercase font-bold tracking-wider flex items-center gap-2">
+                <i class="fa-solid fa-download"></i> Descargar Imagen
+            </a>
+        </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- CÓDIGO JAVASCRIPT LOGIC & LOCALSTORAGE     -->
+    <!-- ========================================== -->
+    <script>
+        // -------------------------------------------------------------
+        // 1. ESTADO GLOBAL & DATOS DEMO POR DEFECTO
+        // -------------------------------------------------------------
+        const STORAGE_KEY = 'SFF_EVENTOS_DATA';
+        const AUTH_KEY = 'SFF_ADMIN_AUTH';
+
+        // Eventos precargados elegantes por defecto si localStorage está vacío
+        const DEFAULT_EVENTS = [
+            {
+                id: 'evt-1',
+                title: 'Boda Real Matrimonial: Marco A. & Giovanna',
+                service: 'Producción de Boda & Dron',
+                date: '2026-08-15',
+                location: 'Gran Hotel Portales, Cochabamba',
+                description: 'Cobertura completa de la boda. Incluye video resumen emotivo de 5 min y sesión fotográfica documental.',
+                photos: [
+                    'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80',
+                    'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80',
+                    'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=1200&q=80'
+                ]
+            },
+            {
+                id: 'evt-2',
+                title: 'Fiesta Patronal: Escara Rosario 2026',
+                service: 'Cobertura Multicámara & Streaming',
+                date: '2026-09-20',
+                location: 'Centro de Convenciones',
+                description: 'Registro audiovisual de la festividad.',
+                photos: [
+                    'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80',
+                    'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=1200&q=80'
+                ]
+            },
+            {
+                id: 'evt-3',
+                title: 'Videoclip Oficial: "Banda de Musicos"',
+                service: 'Producción de Videoclip Musical',
+                date: '2026-10-02',
+                location: 'Locaciones Exteriores Salar & Valles',
+                description: 'Rodaje del videoclip, dirección de arte, efectos especiales e iluminación de alto contraste.',
+                photos: [
+                    'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80',
+                    'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1200&q=80'
+                ]
+            }
+        ];
+
+        // Items para la Galería General Filtrable
+        const GENERAL_GALLERY = [
+            { type: 'foto', url: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80', title: 'Retrato de Novia - Bodas' },
+            { type: 'foto', url: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80', title: 'Recepción Elegante' },
+            { type: 'video', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Reel Cinematográfico 2026', poster: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=800&q=80' },
+            { type: 'foto', url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80', title: 'Escenario de Concierto' },
+            { type: 'video', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Highlights de Boda Premium', poster: 'https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=800&q=80' },
+            { type: 'foto', url: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80', title: 'Conferencia Ejecutiva' }
+        ];
+
+        let eventsData = [];
+        let isAdminLoggedIn = false;
+
+        // -------------------------------------------------------------
+        // 2. INICIALIZACIÓN AL CARGAR LA PÁGINA
+        // -------------------------------------------------------------
+        window.addEventListener('DOMContentLoaded', () => {
+            // Actualizar año en footer
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            // Cargar estado de Auth
+            isAdminLoggedIn = localStorage.getItem(AUTH_KEY) === 'true';
+
+            // Cargar Eventos desde localStorage o cargar los por defecto
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                try {
+                    eventsData = JSON.parse(stored);
+                } catch (e) {
+                    eventsData = DEFAULT_EVENTS;
+                }
+            } else {
+                eventsData = DEFAULT_EVENTS;
+                saveEventsToStorage();
+            }
+
+            // Renderizar Vistas
+            updateAuthUI();
+            renderGallery('all');
+            renderEvents();
+        });
+
+        function saveEventsToStorage() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(eventsData));
+        }
+
+        // -------------------------------------------------------------
+        // 3. AUTENTICACIÓN ADMIN Y GESTIÓN DE INTERFAZ
+        // -------------------------------------------------------------
+        function toggleAdminAuthModal() {
+            if (isAdminLoggedIn) {
+                logoutAdmin();
+            } else {
+                openModal('modal-auth');
+            }
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('admin-user').value.trim();
+            const pass = document.getElementById('admin-pass').value.trim();
+
+            if (user === 'admin' && pass === 'sanfrancisco123') {
+                isAdminLoggedIn = true;
+                localStorage.setItem(AUTH_KEY, 'true');
+                closeModal('modal-auth');
+                updateAuthUI();
+                renderEvents(); // Re-renderizar para habilitar controles de edición
+                showToast('¡Bienvenido Administrador! Permisos activados.', 'success');
+            } else {
+                showToast('Usuario o contraseña incorrectos.', 'error');
+            }
+        }
+
+        function logoutAdmin() {
+            isAdminLoggedIn = false;
+            localStorage.setItem(AUTH_KEY, 'false');
+            updateAuthUI();
+            renderEvents();
+            showToast('Sesión de administrador cerrada.', 'info');
+        }
+
+        function updateAuthUI() {
+            const btnText = document.getElementById('auth-btn-text');
+            const btnTextMobile = document.getElementById('auth-btn-text-mobile');
+            const adminBar = document.getElementById('admin-bar');
+            const adminEventBtnContainer = document.getElementById('admin-event-btn-container');
+
+            if (isAdminLoggedIn) {
+                if (btnText) btnText.textContent = 'Cerrar Sesión Admin';
+                if (btnTextMobile) btnTextMobile.textContent = 'Cerrar Sesión Admin';
+                if (adminBar) adminBar.classList.remove('hidden');
+                if (adminEventBtnContainer) adminEventBtnContainer.classList.remove('hidden');
+            } else {
+                if (btnText) btnText.textContent = 'Acceso Admin';
+                if (btnTextMobile) btnTextMobile.textContent = 'Acceso Admin';
+                if (adminBar) adminBar.classList.add('hidden');
+                if (adminEventBtnContainer) adminEventBtnContainer.classList.add('hidden');
+            }
+        }
+
+        // -------------------------------------------------------------
+        // 4. RENDERIZADO DE GALERÍA Y EVENTOS
+        // -------------------------------------------------------------
+        function filterGallery(type) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-gold', 'text-black');
+                btn.classList.add('border', 'border-gold/30', 'text-gray-300');
+            });
+
+            const activeTab = document.getElementById(`tab-${type}`);
+            if (activeTab) {
+                activeTab.classList.remove('border', 'border-gold/30', 'text-gray-300');
+                activeTab.classList.add('bg-gold', 'text-black');
+            }
+
+            renderGallery(type);
+        }
+
+        function renderGallery(filter = 'all') {
+            const grid = document.getElementById('gallery-grid');
+            grid.innerHTML = '';
+
+            const items = filter === 'all' ? GENERAL_GALLERY : GENERAL_GALLERY.filter(item => item.type === filter);
+
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'group bg-dark-card border border-gold/20 rounded-xl overflow-hidden hover:border-gold/80 transition duration-300 shadow-lg flex flex-col';
+
+                if (item.type === 'foto') {
+                    card.innerHTML = `
+                        <div class="relative overflow-hidden aspect-video cursor-pointer" onclick="openLightbox('${item.url}')">
+                            <img src="${item.url}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-3">
+                                <span class="w-10 h-10 rounded-full bg-gold text-black flex items-center justify-center shadow-lg">
+                                    <i class="fa-solid fa-magnifying-glass-plus"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-4 flex items-center justify-between border-t border-gold/10">
+                            <span class="text-xs font-semibold text-white truncate">${item.title}</span>
+                            <a href="${item.url}" download class="text-xs text-gold hover:text-white flex items-center gap-1">
+                                <i class="fa-solid fa-download"></i> Descargar
+                            </a>
+                        </div>
+                    `;
+                } else {
+                    card.innerHTML = `
+                        <div class="relative aspect-video">
+                            <iframe src="${item.url}" class="w-full h-full rounded-t-xl" title="${item.title}" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                        <div class="p-4 border-t border-gold/10">
+                            <span class="text-xs font-semibold text-white block truncate">${item.title}</span>
+                            <span class="text-[10px] text-gold uppercase tracking-wider font-bold">Video 4K Cine</span>
+                        </div>
+                    `;
+                }
+
+                grid.appendChild(card);
+            });
+        }
+
+        function renderEvents() {
+            const container = document.getElementById('events-container');
+            container.innerHTML = '';
+
+            if (eventsData.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 border border-dashed border-gold/30 rounded-2xl bg-dark-card">
+                        <i class="fa-solid fa-folder-open text-4xl text-gold/40 mb-3"></i>
+                        <p class="text-gray-400 text-sm">No hay eventos registrados actualmente.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            eventsData.forEach(event => {
+                const eventCard = document.createElement('div');
+                eventCard.className = 'bg-dark-card border border-gold/30 rounded-2xl p-6 sm:p-8 gold-border-hover transition duration-300 relative';
+
+                // Fotos del evento HTML
+                let photosHTML = '';
+                if (event.photos && event.photos.length > 0) {
+                    photosHTML = `
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+                            ${event.photos.map((photoUrl, photoIndex) => `
+                                <div class="group relative rounded-lg overflow-hidden border border-gold/20 aspect-video bg-dark-surface">
+                                    <img src="${photoUrl}" class="w-full h-full object-cover cursor-pointer group-hover:scale-105 transition duration-300" onclick="openLightbox('${photoUrl}')">
+                                    
+                                    <!-- Botón de Descargar de Fotos -->
+                                    <a href="${photoUrl}" download="evento-${event.id}-foto-${photoIndex + 1}.jpg" class="absolute bottom-2 right-2 bg-black/80 hover:bg-gold hover:text-black text-gold text-xs p-2 rounded-lg transition border border-gold/40 shadow-lg flex items-center gap-1" title="Descargar Fotografía">
+                                        <i class="fa-solid fa-download"></i>
+                                    </a>
+
+                                    ${isAdminLoggedIn ? `
+                                        <button onclick="deletePhotoFromEvent('${event.id}', ${photoIndex})" class="absolute top-2 right-2 bg-red-600/90 hover:bg-red-700 text-white text-xs p-1.5 rounded-lg transition shadow-lg" title="Eliminar Foto">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    ` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                } else {
+                    photosHTML = `<p class="text-xs text-gray-500 italic mt-4">Este evento aún no contiene fotografías en su galería.</p>`;
+                }
+
+                // Header de Acciones de Admin en Evento
+                const adminControlsHTML = isAdminLoggedIn ? `
+                    <div class="flex items-center gap-2 mb-4 border-b border-gold/20 pb-4 flex-wrap">
+                        <button onclick="openUploadPhotoModal('${event.id}')" class="text-xs bg-dark-surface hover:bg-gold/20 text-gold border border-gold/40 px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-upload"></i> Subir Fotos
+                        </button>
+                        <button onclick="editEvent('${event.id}')" class="text-xs bg-dark-surface hover:bg-gold/20 text-gray-300 border border-gray-700 px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-pen-to-square"></i> Editar
+                        </button>
+                        <button onclick="deleteEvent('${event.id}')" class="text-xs bg-red-950/40 hover:bg-red-900/60 text-red-400 border border-red-800 px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 ml-auto">
+                            <i class="fa-solid fa-trash"></i> Eliminar Evento
+                        </button>
+                    </div>
+                ` : '';
+
+                eventCard.innerHTML = `
+                    ${adminControlsHTML}
+                    <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-3 flex-wrap">
+                                <span class="bg-gold/15 text-gold border border-gold/30 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                                    ${event.service}
+                                </span>
+                                <span class="text-xs text-gray-400 flex items-center gap-1">
+                                    <i class="fa-regular fa-calendar text-gold"></i> ${event.date}
+                                </span>
+                                <span class="text-xs text-gray-400 flex items-center gap-1">
+                                    <i class="fa-solid fa-location-dot text-gold"></i> ${event.location}
+                                </span>
+                            </div>
+                            <h3 class="text-xl sm:text-2xl font-bold text-white font-heading">${event.title}</h3>
+                            <p class="text-sm text-gray-300 max-w-3xl leading-relaxed">${event.description || ''}</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <h4 class="text-xs font-bold text-gold uppercase tracking-widest flex items-center gap-2">
+                            <i class="fa-solid fa-images"></i> Galería del Evento (${event.photos ? event.photos.length : 0} fotos)
+                        </h4>
+                        ${photosHTML}
+                    </div>
+                `;
+
+                container.appendChild(eventCard);
+            });
+        }
+
+        // -------------------------------------------------------------
+        // 5. OPERACIONES ADMIN DE EVENTOS & FOTOS
+        // -------------------------------------------------------------
+        function handleSaveEvent(e) {
+            e.preventDefault();
+            const id = document.getElementById('event-id').value;
+            const title = document.getElementById('event-title').value;
+            const service = document.getElementById('event-service').value;
+            const date = document.getElementById('event-date').value;
+            const location = document.getElementById('event-location').value;
+            const description = document.getElementById('event-desc').value;
+            const photoFiles = document.getElementById('event-photos').files;
+
+            const processSave = (newPhotos = []) => {
+                if (id) {
+                    // Editar existente
+                    const index = eventsData.findIndex(item => item.id === id);
+                    if (index !== -1) {
+                        eventsData[index] = {
+                            ...eventsData[index],
+                            title, service, date, location, description,
+                            photos: [...(eventsData[index].photos || []), ...newPhotos]
+                        };
+                    }
+                } else {
+                    // Crear nuevo
+                    const newEvent = {
+                        id: 'evt-' + Date.now(),
+                        title, service, date, location, description,
+                        photos: newPhotos
+                    };
+                    eventsData.unshift(newEvent);
+                }
+
+                saveEventsToStorage();
+                renderEvents();
+                closeModal('modal-event');
+                showToast('Evento guardado exitosamente.', 'success');
+            };
+
+            // Convertir imágenes a Base64
+            if (photoFiles.length > 0) {
+                const photoPromises = Array.from(photoFiles).map(file => {
+                    return new Promise(resolve => {
+                        const reader = new FileReader();
+                        reader.onload = e => resolve(e.target.result);
+                        reader.readAsDataURL(file);
+                    });
+                });
+
+                Promise.all(photoPromises).then(photosBase64 => {
+                    processSave(photosBase64);
+                });
+            } else {
+                processSave([]);
+            }
+        }
+
+        function editEvent(id) {
+            const event = eventsData.find(item => item.id === id);
+            if (!event) return;
+
+            document.getElementById('modal-event-title').textContent = 'Editar Evento';
+            document.getElementById('event-id').value = event.id;
+            document.getElementById('event-title').value = event.title;
+            document.getElementById('event-service').value = event.service;
+            document.getElementById('event-date').value = event.date;
+            document.getElementById('event-location').value = event.location;
+            document.getElementById('event-desc').value = event.description || '';
+
+            openModal('modal-event');
+        }
+
+        function deleteEvent(id) {
+            if (!confirm('¿Estás seguro de que deseas eliminar este evento y todas sus fotos asociadas?')) return;
+
+            eventsData = eventsData.filter(item => item.id !== id);
+            saveEventsToStorage();
+            renderEvents();
+            showToast('Evento eliminado.', 'info');
+        }
+
+        function openUploadPhotoModal(eventId) {
+            document.getElementById('upload-target-event-id').value = eventId;
+            openModal('modal-upload-photos');
+        }
+
+        function processUploadAdditionalPhotos() {
+            const eventId = document.getElementById('upload-target-event-id').value;
+            const photoFiles = document.getElementById('additional-photos-input').files;
+
+            if (photoFiles.length === 0) {
+                showToast('Por favor selecciona al menos una imagen.', 'error');
+                return;
+            }
+
+            const photoPromises = Array.from(photoFiles).map(file => {
+                return new Promise(resolve => {
+                    const reader = new FileReader();
+                    reader.onload = e => resolve(e.target.result);
+                    reader.readAsDataURL(file);
+                });
+            });
+
+            Promise.all(photoPromises).then(photosBase64 => {
+                const index = eventsData.findIndex(item => item.id === eventId);
+                if (index !== -1) {
+                    eventsData[index].photos = [...(eventsData[index].photos || []), ...photosBase64];
+                    saveEventsToStorage();
+                    renderEvents();
+                    closeModal('modal-upload-photos');
+                    showToast('Fotografías agregadas al evento.', 'success');
+                }
+            });
+        }
+
+        function deletePhotoFromEvent(eventId, photoIndex) {
+            const index = eventsData.findIndex(item => item.id === eventId);
+            if (index !== -1) {
+                eventsData[index].photos.splice(photoIndex, 1);
+                saveEventsToStorage();
+                renderEvents();
+                showToast('Fotografía eliminada.', 'info');
+            }
+        }
+
+        // -------------------------------------------------------------
+        // 6. FORMULARIO DE CONTACTO & UTILIDADES
+        // -------------------------------------------------------------
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            showToast('¡Gracias por tu mensaje! Nos pondremos en contacto muy pronto.', 'success');
+            e.target.reset();
+        }
+
+        function openLightbox(url) {
+            document.getElementById('lightbox-img').src = url;
+            document.getElementById('lightbox-download').href = url;
+            openModal('modal-lightbox');
+        }
+
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('hidden');
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('mobile-menu-icon');
+            menu.classList.toggle('hidden');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-xmark');
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            const toastIcon = document.getElementById('toast-icon');
+
+            toastMsg.textContent = message;
+
+            if (type === 'success') {
+                toastIcon.className = 'fa-solid fa-circle-check text-emerald-400 text-xl';
+            } else if (type === 'error') {
+                toastIcon.className = 'fa-solid fa-circle-exclamation text-red-400 text-xl';
+            } else {
+                toastIcon.className = 'fa-solid fa-circle-info text-gold text-xl';
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
